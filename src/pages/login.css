@@ -1,0 +1,111 @@
+/* Container — fundo escuro, card centralizado */
+
+.login-container {
+  min-height: 100vh;
+  background-color: #000000a4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card — painel com o formulário */
+
+.login-card {
+  background-color: #0202029f;
+  border: 1px solid #c99811;
+  border-radius: 12px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+}
+
+.login-logo {
+  color: #f5a623;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.login-subtitulo {
+  color: #64748b;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.login-input {
+  background: #0d1b2a;
+  color: #e2e8f0;
+
+  border: 1px solid #48494752;
+  border-radius: 6px;
+
+  padding: 11px 14px;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+  
+}
+
+.login-input:focus{
+  border-color: #f8bb38;
+}
+
+.login-erro {
+  color: #ef4444;
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 6px;
+  padding: 8px 12px;
+  /* font-size: 0.9rem; */
+  text-align: center;
+}
+
+.login-btn {
+  background: #f7f7f7;
+  color: #000000;
+  border: none;
+
+  border-radius: 6px;
+  padding: 12px;
+
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.login-btn:hover {
+  background-color: #D4900F;
+  /* box-shadow: 0 4px 14px #f5a62366; */
+}
+
+.login-btn:active {
+  /* background-color: #B8800D; */
+  transform: scale(0.97);
+  /* box-shadow: none; */
+}
+
+/* .login-btn:focus {
+  outline: 2px solid #38BDF8;
+  outline-offset: 2px;
+} */
+
+.login-aviso {
+  color: #475a75;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0);}
+  15%, 45%, 75% { transform: translateX(-8px);}
+  30%, 60%, 90% { transform: translateX(8px);}
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
