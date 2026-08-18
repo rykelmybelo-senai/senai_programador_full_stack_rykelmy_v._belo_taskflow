@@ -64,6 +64,7 @@
     box-shadow 0.2s ease;
   box-shadow: 0 2px 8px rgba(245, 166, 35, 0.25);
   white-space: nowrap;
+  margin-top: auto;
 }
 
 .btnLogout:hover {
@@ -80,4 +81,11 @@
 .btnLogout:focus {
   outline: 2px solid #f83838;
   outline-offset: 2px;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+.sidebar {
+flex-direction: column;
+}
 }
