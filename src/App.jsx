@@ -19,12 +19,13 @@ function App() {
             path="/"
             element={
               <RotaPrivada>
-                <MiniKanban />{" "}
+                <MiniKanban />
               </RotaPrivada>
             }
           />
 
           <Route path="/login" element={<Login />} />
+
 
           <Route path="/sobre" element={<Sobre />} />
         </Routes>
