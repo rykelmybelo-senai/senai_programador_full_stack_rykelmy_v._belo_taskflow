@@ -3,57 +3,73 @@ import ModalTarefa from "../componentes/ModalTarefa";
 import { useState, useEffect } from "react";
 import ListaTarefas from "../componentes/ListaTarefas";
 import Header from "../componentes/Header";
+import axios from "axios";
 
 export default function MiniKanban() {
-  // 1. Estado inicial carregando do localStorage
-  const [proximoId, setProximoId] = useState(1);
-  const [tarefas, setTarefas] = useState(() => {
-    const salvas = localStorage.getItem("kanban_tarefas");
-    if (!salvas) return [];
-    const tarefasConvertidas = JSON.parse(salvas);
-    setProximoId(
-      tarefasConvertidas[tarefasConvertidas.length - 1]?.id + 1 || 1,
-    );
-    return Array.isArray(tarefasConvertidas) ? tarefasConvertidas : [];
-  });
 
-  // Persiste as tarefas no localStorage sempre que forem alteradas
+  const URL_API = "https://6a85ac489c451dc67a63f0c8.mockapi.io/api/v1";
+  const [tarefas, setTarefas] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
+
   useEffect(() => {
-    localStorage.setItem("kanban_tarefas", JSON.stringify(tarefas));
-  }, [tarefas]);
+    async function carregarTarefas() {
+      try {
+        const resposta = await axios.get(URL_API + "/tarefas");
+          await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  // Mostra o contador na aba do navegador
-  useEffect(() => {
-    const pendentes = tarefas.filter((t) => t.coluna === "afazer").length;
-
-    if (pendentes > 0) {
-      document.title = `(${pendentes}) TaskFlow`;
-    } else {
-      document.title = "TaskFlow";
+        setTarefas(resposta.data);
+      } catch (e) {
+        setErro("Erro ao carregar tarefas. Verifique a conexão.")
+        console.error(e);
+      } finally {
+        setCarregando(false);
+      }
     }
-  }, [tarefas]);
+    carregarTarefas();
+  }, []);
 
   // Deletar tarefa
-  const deletarTarefa = (id) => {
+async function deletarTarefa(id) {
+  const confirmado = window.confirm('Tem certeza que deseja deletar esta tarefa?');
+    if (!confirmado) return;
+      try {
 
-    const confirmado = window.confirm(
-      "Tem certeza que deseja deletar esta tarefa?",
+// DELETE na API — id na URL
+      await axios.delete(URL_API + '/tarefas/' + id);
+
+// Remover do estado local apenas apos confirmar na API
+  setTarefas(tarefasAtuais =>
+    tarefasAtuais.filter(t => t.id !== id)
     );
-    if (confirmado) {
-      setTarefas(tarefas.filter((t) => t.id !== id));
-    } 
-  };
+} catch (e) {
+    setErro('Erro ao deletar tarefa. Tente novamente.');
+      console.error(e);
+    }
+}
 
   // Passo 2: Função moverTarefa sem mutar o array (.map + spread)
-  const moverTarefa = (id, novaColuna) => {
-    setTarefas(
-      tarefas.map((tarefa) =>
-        tarefa.id === id
-          ? { ...tarefa, coluna: novaColuna } // spread copia tudo, só coluna muda
-          : tarefa,
-      ),
+async function moverTarefa(id, novaColuna) {
+  try {
+
+// PATCH — envia apenas o campo coluna
+    const { data: tarefaMovida } = await axios.put(
+      URL_API + '/tarefas/' + id,
+      { coluna: novaColuna }
     );
-  };
+
+// Atualizar o estado local com a tarefa retornada
+
+      setTarefas(tarefasAtuais =>
+        tarefasAtuais.map(t =>
+          t.id === id ? tarefaMovida : t
+        )
+      );
+} catch (e) {
+    setErro('Erro ao mover tarefa. Tente novamente.');
+      console.error(e);
+    }
+}
 
   //Integrando o Modal
   const [modalAberto, setModalAberto] = useState(false);
@@ -71,18 +87,35 @@ export default function MiniKanban() {
     setModalAberto(true);
   }
 
-  function salvarTarefa(dados) {
-    if (dados.id) {
-      setTarefas(
-        tarefas.map((t) => (t.id === dados.id ? { ...t, ...dados } : t)),
-      );
-    } else {
-      setTarefas([...tarefas, { ...dados, id: proximoId}]);
-      setProximoId(proximoId + 1);
-    }
+  async function salvarTarefa(dados) {
+    try {
+      if (dados.id !== undefined) {
+// EDITAR — PUT com o id na URL
+        const { data: tarefaEditada } = await axios.put(URL_API + '/tarefas/' + dados.id,
+          {
+            texto: dados.texto,
+            prioridade: dados.prioridade,
+            cidade: dados.cidade,
+            coluna: dados.coluna,
+          }
+        );
+
+// Atualizar a tarefa no estado local
+        setTarefas(tarefasAtuais => tarefasAtuais.map(t => t.id === dados.id ? tarefaEditada : t));
+      } else {
+
+// CRIAR — POST
+        const { data: novaTarefa } = await axios.post(URL_API + "/tarefas", dados);
+        setTarefas(tarefasAtuais => [...tarefasAtuais, novaTarefa]);
+      }
+  } catch (e) {
+      setErro('Erro ao salvar tarefa.');
+      console.error(e);
   }
+}
 
   return (
+
     <>
       <Header
         titulo="Mini Kanban"
@@ -91,33 +124,37 @@ export default function MiniKanban() {
       />
 
       <main className="container">
+        {carregando && (<p style={{ maxWidth: "768px", textAlign:'center', alignItems: "center", color:'#f09819', fontSize: "1rem", padding: "40px 360px" }}>CARREGANDO TAREFAS...</p>)}
+        {erro && (<p style={{ textAlign:'center', color:'#EF4444' }}>{erro}</p>)}
+        {!carregando && !erro && (
+          <>
         <div className="kanban-coluna">
           {/* ── COLUNA 1: A FAZER ────────────────────────────────────────── */}
           <div className="kanban-coluna-header">
             <span id="coluna-afazer">
               <h3>A Fazer</h3>
             </span>
-              <span className="kanban-contador">
-                {tarefas.filter((t) => t.coluna === "afazer").length}
-              </span>
-              <button
-                className="kanban-btn-add"
-                onClick={() => abrirModalCriar("afazer")}
-              >
-                +
-              </button>
-            </div>
-            <ListaTarefas
-              tarefas={tarefas.filter((t) => t.coluna === "afazer")}
-              onDeletar={deletarTarefa}
-              onEditar={abrirModalEditar}
-              onMover={moverTarefa}
-              colunaAnterior={null}
-              colunaProxima="andamento"
-            />
+            <span className="kanban-contador">
+              {tarefas.filter((t) => t.coluna === "afazer").length}
+            </span>
+            <button
+              className="kanban-btn-add"
+              onClick={() => abrirModalCriar("afazer")}
+            >
+              +
+            </button>
+          </div>
+          <ListaTarefas
+            tarefas={tarefas.filter((t) => t.coluna === "afazer")}
+            onDeletar={deletarTarefa}
+            onEditar={abrirModalEditar}
+            onMover={moverTarefa}
+            colunaAnterior={null}
+            colunaProxima="andamento"
+          />
         </div>
 
-        {/* ── COLUNA 2: EM ANDAMENTO ───────────────────────────────────── */}
+        {/*── COLUNA 2: EM ANDAMENTO ──────*/}
         <div className="kanban-coluna2">
           <div className="kanban-coluna-header">
             <span id="coluna-andamento">
@@ -127,11 +164,11 @@ export default function MiniKanban() {
               {tarefas.filter((t) => t.coluna === "andamento").length}
             </span>
             <button
-                className="kanban-btn-add"
-                onClick={() => abrirModalCriar("andamento")}
-              >
-                +
-              </button>
+              className="kanban-btn-add"
+              onClick={() => abrirModalCriar("andamento")}
+            >
+              +
+            </button>
           </div>
           <ListaTarefas
             tarefas={tarefas.filter((t) => t.coluna === "andamento")}
@@ -153,11 +190,11 @@ export default function MiniKanban() {
               {tarefas.filter((t) => t.coluna === "concluido").length}
             </span>
             <button
-                className="kanban-btn-add"
-                onClick={() => abrirModalCriar("concluido")}
-              >
-                +
-              </button>
+              className="kanban-btn-add"
+              onClick={() => abrirModalCriar("concluido")}
+            >
+              +
+            </button>
           </div>
           <ListaTarefas
             tarefas={tarefas.filter((t) => t.coluna === "concluido")}
@@ -176,14 +213,15 @@ export default function MiniKanban() {
           tarefa={tarefaEditando}
           coluna={colunaAtiva}
         />
-      <div>
-        <footer>
-          <p>
-            Desenvolvido por: <em>Rykelmy V. Belo</em>
-          </p>
-          <p>TaskFlow © 2026 — SENAI CTGAS-ER · Prof. Alan Glei.</p>
-        </footer>
-      </div>
+        <div>
+          <footer>
+            <p>
+              Desenvolvido por: <em>Rykelmy V. Belo</em>
+            </p>
+            <p>TaskFlow © 2026 — SENAI CTGAS-ER · Prof. Alan Glei.</p>
+          </footer>
+        </div></>
+        )}
       </main>
     </>
   );
