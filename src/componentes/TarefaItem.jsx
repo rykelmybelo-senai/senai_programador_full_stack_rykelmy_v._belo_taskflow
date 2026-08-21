@@ -16,9 +16,7 @@ function TarefaItem({
   cidade = null,
 }) {
   // ── Classes CSS — sem alteração ──────────────────────────────────────────
-  const classeItem = styles.tarefa +
-    " " +
-    styles[prioridade];
+  const classeItem = styles.tarefa + " " + styles[prioridade];
 
   // const classeTexto = concluida
   //   ? styles.textoTarefa + " " + styles["texto-tarefa"]
@@ -34,9 +32,7 @@ function TarefaItem({
     <li className={classeItem}>
       <div className={styles.conteudo}>
         {/* Texto da tarefa — duplo clique para concluir (funciona nos dois modos) */}
-        <span onDoubleClick={onEditar}>
-          {texto}
-        </span>
+        <span onDoubleClick={onEditar}>{texto}</span>
         {cidade && <span className={styles.cidade}>{cidade}</span>}
       </div>
 
@@ -59,6 +55,11 @@ function TarefaItem({
             ←
           </button>
         )}
+        
+        {/* Botão X — deletar — presente nos dois modos */}
+        <button className={styles.btnDeletar} onClick={onDeletar}>
+          🗑️
+        </button>
 
         {/* Botão → só aparece no modo Kanban E se há próxima coluna */}
         {modoKanban && colunaProxima && (
@@ -70,11 +71,6 @@ function TarefaItem({
             →
           </button>
         )}
-
-        {/* Botão X — deletar — presente nos dois modos */}
-        <button className={styles.btnDeletar} onClick={onDeletar}>
-          🗑️
-        </button>
 
         {/* <span className={styles.cidade}>{cidade}</span> */}
       </div>
