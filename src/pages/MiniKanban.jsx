@@ -124,17 +124,13 @@ export default function MiniKanban() {
 
       <main className="container">
         {carregando && (
-          <p
-            style={{
-              maxWidth: "2000px",
-              textAlign: "center",
-              alignItems: "center",
-              color: "#f09819",
-              padding: "40px 490px",
-            }}
-          >
-            CARREGANDO TAREFAS...
-          </p>
+          <section class="dots-container">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </section>
         )}
         {erro && (
           <p style={{ textAlign: "center", color: "#EF4444" }}>{erro}</p>
