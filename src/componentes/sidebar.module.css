@@ -27,6 +27,7 @@
 
 .link {
   color: #94a3b8;
+  border-left: 2px solid #f09819;
   text-decoration: none;
   padding: 10px 14px;
   border-radius: 6px;
