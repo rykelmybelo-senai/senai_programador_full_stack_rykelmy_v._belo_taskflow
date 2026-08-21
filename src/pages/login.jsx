@@ -29,6 +29,7 @@ function Login() {
   return (
     <div className="login-container">
       <div className={`login-card ${shake ? 'shake' : ''}`}>
+        <h1 className="login-bolls">🔴🟡🟢 </h1>
         <h1 className="login-logo">TaskFlow</h1>
         <p className="login-subtitulo">Faça login para continuar</p>
 
