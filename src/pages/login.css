@@ -1,14 +1,11 @@
-/* Container — fundo escuro, card centralizado */
-
 .login-container {
   min-height: 100vh;
   background-color: #000000a4;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
 }
-
-/* Card — painel com o formulário */
 
 .login-card {
   background-color: #0202029f;
@@ -112,4 +109,11 @@
 
 .shake {
   animation: shake 0.5s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    padding: 28px 24px;
+    width: 100%;
+  }
 }

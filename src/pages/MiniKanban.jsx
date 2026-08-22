@@ -1,4 +1,3 @@
-//
 import ModalTarefa from "../componentes/ModalTarefa";
 import { useState, useEffect } from "react";
 import ListaTarefas from "../componentes/ListaTarefas";
@@ -124,12 +123,12 @@ export default function MiniKanban() {
 
       <main className="container">
         {carregando && (
-          <section class="dots-container">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+          <section className="dots-container">
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
           </section>
         )}
         {erro && (
@@ -222,7 +221,7 @@ export default function MiniKanban() {
               tarefa={tarefaEditando}
               coluna={colunaAtiva}
             />
-            <div>
+            <div style={{ width: "100%", marginTop: "40px" }}>
               <footer>
                 <p>
                   Desenvolvido por: <em>Rykelmy V. Belo</em>

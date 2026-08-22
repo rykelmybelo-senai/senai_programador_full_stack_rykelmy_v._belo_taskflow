@@ -1,7 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
-   TASKFLOW — style.css
+   TASKFLOW
    Programador Full Stack · SENAI CTGAS-ER · Prof. Alan Glei · Aluno: Rykelmy Veloso Belo
-   Semana 2 e 3 (HTML + CSS) + Semana 4 (JavaScript no Navegador)
    ═══════════════════════════════════════════════════════════ */
 
 /* ── 1. RESET ─────────────────────────────────────────────── */
@@ -357,7 +356,8 @@ main {
 
 /* ── 15. FOOTER ───────────────────────────────────────────── */
 footer {
-  padding: 20px 360px;
+  width: 100%;
+  padding: 20px 0;
   text-align: center;
   align-items: center;
   color: #4A6480;
@@ -370,12 +370,12 @@ footer {
 
 /* ── 16. MINI KANBAN ─────────────────────────────────────── */
 .kanban-quadro {
-  display: flex;          /* colunas lado a lado */
+  display: flex;
   gap: 16px;
-  align-items: flex-start;/* colunas crescem para baixo individualmente */
+  align-items: flex-start;
   margin-top: 24px;
   padding-bottom: 32px;
-  overflow-x: auto;       /* scroll horizontal em telas pequenas */
+  overflow-x: auto;
 }
 
 /* ── COLUNA INDIVIDUAL ───────────────────────────────────── */
@@ -417,15 +417,15 @@ footer {
 
 
 #coluna-afazer h3{
-color: #f52323; /* cor da borda esquerda para "A Fazer" */
+color: #f52323;
 }
 
 #coluna-andamento h3{
-color: #f8c538; /* cor da borda esquerda para "Em Andamento" */
+color: #f8c538;
 }
 
 #coluna-concluido h3{
-color: #22C55E; /* cor da borda esquerda para "Concluído" */
+color: #22C55E;
 }
 
 /* ── CABEÇALHO DA COLUNA: título + contador ──────────────── */

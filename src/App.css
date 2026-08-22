@@ -167,7 +167,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -4.5px;
     border: 5px solid transparent;
@@ -302,3 +302,23 @@
   }
 }
 
+/* ── COMPENSAÇÃO DA SIDEBAR NO LAYOUT ── */
+.app-layout {
+  display: flex;
+}
+
+.app-layout > main {
+  /* Empurra o conteúdo principal exatamente a largura da sidebar */
+  margin-left: 220px;
+  /* Garante que o conteúdo não passe da tela */
+  width: calc(100% - 220px);
+  min-height: 100vh;
+}
+
+/* Garante que em telas menores ele volte ao normal */
+@media (max-width: 768px) {
+  .app-layout > main {
+    margin-left: 0;
+    width: 100%;
+  }
+}

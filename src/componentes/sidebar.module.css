@@ -1,15 +1,18 @@
 .sidebar {
-  width: 220px; /* largura fixa da sidebar */
-  min-height: 100vh; /* ocupa toda a altura da tela */
+  width: 220px;
+  min-height: 100vh;
   background-color: #0d1b2a;
   border-right: 1px solid #0d6bb87c;
   padding: 24px 16px;
-  position: fixed; /* fica fixa enquanto o conteúdo rola */
+  position: fixed;
   top: 0;
   left: 0;
   display: flex;
   flex-direction: column;
   gap: 32px;
+
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
 }
 
 .logo h1 {
@@ -41,7 +44,6 @@
   background-color: #1b2a3b;
   color: #e2e8f0;
 }
-/* NavLink adiciona .ativo automaticamente quando a rota está ativa */
 
 .ativo {
   background-color: #1e3a5f;
@@ -63,14 +65,14 @@
     background-color 0.2s ease,
     transform 0.1s ease,
     box-shadow 0.2s ease;
-  box-shadow: 0 2px 8px rgba(245, 166, 35, 0.25);
+  box-shadow: 0 2px 8px #f5a62340;
   white-space: nowrap;
   margin-top: auto;
 }
 
 .btnLogout:hover {
   background-color: #ffffff;
-  box-shadow: 0 4px 14px rgba(245, 166, 35, 0.4);
+  box-shadow: 0 4px 14px #f5a62366;
 }
 
 .btnLogout:active {
@@ -84,9 +86,50 @@
   outline-offset: 2px;
 }
 
+.btnMenuMobile {
+  display: none;
+}
+
+.overlay {
+  display: none;
+}
+
 /* Responsividade para telas menores */
 @media (max-width: 768px) {
-.sidebar {
-flex-direction: column;
-}
+  .sidebar {
+    /* Esconde a sidebar para a esquerda */
+    transform: translateX(-100%);
+    padding-top: 60px;
+  }
+
+  .sidebar.aberta {
+    /* Traz a sidebar de volta para a tela */
+    transform: translateX(0);
+  }
+
+  /* Cria o botão de menu */
+  .btnMenuMobile {
+    display: block;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+    background-color: #1b2a3b;
+    color: #f5a623;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    font-size: 1.5rem;
+    padding: 2px 10px;
+    cursor: pointer;
+  }
+
+  /* Cria a tela escura atrás do menu quando aberto */
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 900;
+  }
 }

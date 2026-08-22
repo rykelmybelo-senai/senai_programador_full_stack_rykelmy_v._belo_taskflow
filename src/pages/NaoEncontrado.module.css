@@ -1,0 +1,150 @@
+.container404 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 20px;
+  text-align: center;
+  gap: 40px;
+  padding-top: 50px;
+}
+
+.conteudoTexto h2 {
+  font-size: 2rem;
+  color: #f5a623;
+  margin-bottom: 12px;
+}
+
+.conteudoTexto p {
+  color: #94a3b8;
+  margin-bottom: 24px;
+}
+
+.btnVoltar {
+  display: inline-block;
+  padding: 10px 24px;
+  background-color: #1e3a5f;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 700;
+  transition: background-color 0.2s;
+}
+
+.btnVoltar:hover {
+  background-color: #f5a623;
+  color: #0d1b2a;
+}
+
+/* ── SVg Responsivo ── */
+.faceContainer {
+  width: 100%;
+  max-width: 300px;
+  color: #f5a623;
+}
+
+.face {
+  width: 100%;
+  height: auto;
+}
+
+/* Animações */
+.eyes,
+.eyeLid,
+.mouthLeft,
+.mouthRight,
+.nose,
+.pupil {
+  animation: eyes 1s 0.3s forwards;
+}
+
+.eyeLid,
+.pupil {
+  animation-duration: 4s;
+  animation-delay: 1.3s;
+  animation-iteration-count: infinite;
+}
+
+.eyeLid {
+  animation-name: eyeLidAnim;
+}
+.mouthLeft {
+  animation-name: mouthLeftAnim;
+}
+.mouthRight {
+  animation-name: mouthRightAnim;
+}
+.nose {
+  animation-name: noseAnim;
+}
+.pupil {
+  animation-name: pupilAnim;
+}
+
+@keyframes eyeLidAnim {
+  0%,
+  40%,
+  45%,
+  100% {
+    transform: translateY(0);
+  }
+  42.5% {
+    transform: translateY(17.5px);
+  }
+}
+@keyframes eyes {
+  from {
+    transform: translateY(112.5px);
+  }
+  to {
+    transform: translateY(15px);
+  }
+}
+@keyframes pupilAnim {
+  0%,
+  37.5%,
+  40%,
+  45%,
+  87.5%,
+  100% {
+    stroke-dashoffset: 0;
+    transform: translate(0, 0);
+  }
+  12.5%,
+  25%,
+  62.5%,
+  75% {
+    transform: translate(-35px, 0);
+  }
+  42.5% {
+    stroke-dashoffset: 35;
+    transform: translate(0, 17.5px);
+  }
+}
+@keyframes mouthLeftAnim {
+  from,
+  50% {
+    stroke-dashoffset: -102;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes mouthRightAnim {
+  from,
+  50% {
+    stroke-dashoffset: 102;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes noseAnim {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(0, 22.5px);
+  }
+}

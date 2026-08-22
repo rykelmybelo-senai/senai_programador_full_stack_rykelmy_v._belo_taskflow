@@ -2,14 +2,14 @@ header {
   background-image: linear-gradient(to right, #0d1b2a, #0f3377);
   border-bottom: 1px solid #1E3A5F;
   /* padding: 20px 50px; */
-  position: left;
+  position: sticky;
   top: 0;
   z-index: 10;
 }
 
 header .container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
@@ -22,7 +22,7 @@ header .container {
 } */
 
 .logo h1 {
-  margin-left: 850px;
+  /* margin-left: 850px; */
   margin-top: 20px;
   font-size: 2rem;
   background: linear-gradient(to left, #ff512f, #f09819);
@@ -30,14 +30,14 @@ header .container {
   -webkit-text-fill-color: transparent;
   font-weight: 700;
   line-height: 1.2;
-  text-align: left;
+  text-align: center;
 }
 
 .logo p {
-  margin-left: 850px;
+  /* margin-left: 850px; */
   color: #94A3B8;
   font-size: 0.85rem;
-  text-align: left;
+  text-align: center;
   margin-bottom: 20px;
 }
 
