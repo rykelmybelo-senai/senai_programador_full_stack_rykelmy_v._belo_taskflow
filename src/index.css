@@ -371,6 +371,7 @@ footer {
 /* ── 16. MINI KANBAN ─────────────────────────────────────── */
 .kanban-quadro {
   display: flex;
+  justify-content: center;
   gap: 16px;
   align-items: flex-start;
   margin-top: 24px;
@@ -379,13 +380,16 @@ footer {
 }
 
 /* ── COLUNA INDIVIDUAL ───────────────────────────────────── */
-.kanban-coluna .kanban-coluna2 .kanban-coluna3 {
+.kanban-coluna, .kanban-coluna2, .kanban-coluna3 {
   flex: 1;
   min-width: 250px;
   background-color: #1B2A3B;
   border: 1px solid #1E3A5F;
   border-radius: 8px;
   padding: 12px;
+
+  align-self: flex-start !important; 
+  margin-top: 0 !important;
 }
 
 .kanban-coluna {
@@ -395,6 +399,9 @@ footer {
   border: 1px solid #f523238f;
   border-radius: 8px;
   padding: 12px;
+
+  align-self: flex-start !important; 
+  margin-top: 0 !important;
 }
 
 .kanban-coluna2 {
@@ -404,6 +411,9 @@ footer {
   border: 1px solid #f8c5387c;
   border-radius: 8px;
   padding: 12px;
+
+  align-self: flex-start !important; 
+  margin-top: 0 !important;
 }
 
 .kanban-coluna3 {
@@ -413,6 +423,9 @@ footer {
   border: 1px solid #22c55e88;
   border-radius: 8px;
   padding: 12px;
+
+  align-self: flex-start !important; 
+  margin-top: 0 !important;
 }
 
 
@@ -543,7 +556,7 @@ color: #22C55E;
 .kanban-quadro {
 flex-direction: column;
 }
-.kanban-coluna .kanban-coluna2 .kanban-coluna3 {
+.kanban-coluna, .kanban-coluna2, .kanban-coluna3 {
 width: 100%;
 }
 }
