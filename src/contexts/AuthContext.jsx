@@ -3,22 +3,27 @@ import { createContext, useContext, useState } from "react";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [logado, setLogado] = useState(false);
+  const [token, setToken] = useState(
+    localStorage.getItem("token")
+  );
 
-  // Função de login — chama setLogado(true)
+  const [usuario, setUsuario] = useState(null);
 
-  function login() {
-    setLogado(true);
+  function login(dadosUsuario, tokenRecebido) {
+    setUsuario(dadosUsuario);
+    setToken(tokenRecebido);
+    localStorage.setItem("token", tokenRecebido);
+    console.log(tokenRecebido)
   }
 
-  // Função de logout — chama setLogado(false)
-
   function logout() {
-    setLogado(false);
+    setUsuario(null);
+    setToken(null);
+    localStorage.removeItem("token");
   }
 
   return (
-    <AuthContext.Provider value={{ logado, login, logout }}>
+    <AuthContext.Provider value={{ token, usuario, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
@@ -27,11 +32,9 @@ export function AuthProvider({ children }) {
 export function useAuth() {
   const context = useContext(AuthContext);
 
-  // Erro claro se usado fora do AuthProvider
-
   if (!context) {
     throw new Error("useAuth deve ser usado dentro do AuthProvider");
   }
 
-  return context; // { logado, login, logout }
+  return context;
 }
