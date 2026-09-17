@@ -9,7 +9,7 @@ function NaoEncontrado() {
         <p>
           Parece que você tentou acessar uma página que não existe no TaskFlow.
         </p>
-        <Link to="/" className={styles.btnVoltar}>
+        <Link to="/login" className={styles.btnVoltar}>
           Ir para o login
         </Link>
       </div>

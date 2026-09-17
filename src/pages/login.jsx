@@ -2,53 +2,60 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import "./login.css";
 import { useAuth } from "../contexts/AuthContext";
+import api from "../api";
 
 function Login() {
-  const {login} = useAuth();
-  const [usuario, setUsuario] = useState("");
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
   const [shake, setShake] = useState(false);
   const navigate = useNavigate();
 
-  function handleLogin() {
-    if (usuario === "admin" && senha === "1234") {
-      login(); // atualiza o estado no App.jsx
-      navigate("/"); // redireciona — chamado APÓS a ação
+  async function handleLogin() {
+    setErro("");
+    try {
+      const resposta = await api.post("/auth/login", {
+        email,
+        senha,
+      });
+      const { token, usuario } = resposta.data;
 
-      return;
+      login(usuario, token);
+      navigate("/");
+    } catch (err) {
+      setErro(err.response?.data?.erro || "Erro ao fazer login");
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
     }
-
-    // Credenciais erradas → exibe mensagem de erro
-
-    setErro("Usuário ou senha incorretos");
-    setShake(true);
-    setTimeout(() => setShake(false), 500);
   }
 
   return (
     <div className="login-container">
-      <div className={`login-card ${shake ? 'shake' : ''}`}>
-        <h1 className="login-bolls">🔴🟡🟢 </h1>
-        <h1 className="login-logo">TaskFlow</h1>
-        <p className="login-subtitulo">Faça login para continuar</p>
+      <div className={`login-card ${shake ? "shake" : ""}`}>
+        <h1 className="login-logo">Login</h1>
+        <p className="login-subtitulo">Informe suas credenciais para continuar</p>
 
         {/* Input de usuário — estado controlado */}
+
+        <label for = "email">Email</label>
 
         <input
           className="login-input"
           type="text"
-          placeholder="Usuário"
-          value={usuario}
-          onChange={(e) => setUsuario(e.target.value)}
+          placeholder="Ex: seu@email.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         {/* Input de senha — type='password' oculta os caracteres */}
 
+        <label for = "senha">Senha</label>
+
         <input
           className="login-input"
           type="password"
-          placeholder="Senha"
+          placeholder="Informe sua senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleLogin()}
@@ -62,8 +69,7 @@ function Login() {
         </button>
 
         <p className="login-aviso">
-          Este login é apenas para fins didáticos. Credenciais reais vêm no
-          módulo back-end.<br /><br />
+          <br />
           Desenvolvido por: <em>Rykelmy V. Belo (⌐■_■)</em>
         </p>
       </div>

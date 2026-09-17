@@ -2,10 +2,9 @@ import ModalTarefa from "../componentes/ModalTarefa";
 import { useState, useEffect } from "react";
 import ListaTarefas from "../componentes/ListaTarefas";
 import Header from "../componentes/Header";
-import axios from "axios";
+import api from "../api";
 
 export default function MiniKanban() {
-  const URL_API = "https://6a85ac489c451dc67a63f0c8.mockapi.io/api/v1";
   const [tarefas, setTarefas] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
@@ -13,8 +12,10 @@ export default function MiniKanban() {
   useEffect(() => {
     async function carregarTarefas() {
       try {
-        const resposta = await axios.get(URL_API + "/tarefas");
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setCarregando(true);
+        setErro("");
+
+        const resposta = await api.get("/tarefas");
 
         setTarefas(resposta.data);
       } catch (e) {
@@ -35,7 +36,7 @@ export default function MiniKanban() {
     if (!confirmado) return;
     try {
       // DELETE na API — id na URL
-      await axios.delete(URL_API + "/tarefas/" + id);
+      await api.delete("/tarefas/" + id);
 
       // Remover do estado local apenas apos confirmar na API
       setTarefas((tarefasAtuais) => tarefasAtuais.filter((t) => t.id !== id));
@@ -49,10 +50,9 @@ export default function MiniKanban() {
   async function moverTarefa(id, novaColuna) {
     try {
       // PATCH — envia apenas o campo coluna
-      const { data: tarefaMovida } = await axios.put(
-        URL_API + "/tarefas/" + id,
-        { coluna: novaColuna },
-      );
+      const { data: tarefaMovida } = await api.put("/tarefas/" + id, {
+        coluna: novaColuna,
+      });
 
       // Atualizar o estado local com a tarefa retornada
 
@@ -85,15 +85,12 @@ export default function MiniKanban() {
     try {
       if (dados.id !== undefined) {
         // EDITAR — PUT com o id na URL
-        const { data: tarefaEditada } = await axios.put(
-          URL_API + "/tarefas/" + dados.id,
-          {
-            texto: dados.texto,
-            prioridade: dados.prioridade,
-            cidade: dados.cidade,
-            coluna: dados.coluna,
-          },
-        );
+        const { data: tarefaEditada } = await api.put("/tarefas/" + dados.id, {
+          texto: dados.texto,
+          prioridade: dados.prioridade,
+          cidade: dados.cidade,
+          coluna: dados.coluna,
+        });
 
         // Atualizar a tarefa no estado local
         setTarefas((tarefasAtuais) =>
@@ -101,10 +98,7 @@ export default function MiniKanban() {
         );
       } else {
         // CRIAR — POST
-        const { data: novaTarefa } = await axios.post(
-          URL_API + "/tarefas",
-          dados,
-        );
+        const { data: novaTarefa } = await api.post("/tarefas", dados);
         setTarefas((tarefasAtuais) => [...tarefasAtuais, novaTarefa]);
       }
     } catch (e) {
