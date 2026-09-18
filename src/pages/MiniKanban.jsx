@@ -46,23 +46,16 @@ export default function MiniKanban() {
     }
   }
 
-  // Passo 2: Função moverTarefa sem mutar o array (.map + spread)
-  async function moverTarefa(id, novaColuna) {
-    try {
+  // Função moverTarefa sem mutar o array (.map + spread)
+  async function moverTarefa(id, dados, novaColuna) {
       // PATCH — envia apenas o campo coluna
-      const { data: tarefaMovida } = await api.put("/tarefas/" + id, {
-        coluna: novaColuna,
-      });
+      const tarefaMovida = await api.put(`/tarefas/${id}`, dados, { coluna: novaColuna });
 
       // Atualizar o estado local com a tarefa retornada
 
       setTarefas((tarefasAtuais) =>
-        tarefasAtuais.map((t) => (t.id === id ? tarefaMovida : t)),
+        tarefasAtuais.map((t) => (t.id === id ? tarefaMovida.data : t)),
       );
-    } catch (e) {
-      setErro("Erro ao mover tarefa. Tente novamente.");
-      console.error(e);
-    }
   }
 
   //Integrando o Modal
@@ -85,17 +78,18 @@ export default function MiniKanban() {
     try {
       if (dados.id !== undefined) {
         // EDITAR — PUT com o id na URL
-        const { data: tarefaEditada } = await api.put("/tarefas/" + dados.id, {
-          texto: dados.texto,
-          prioridade: dados.prioridade,
-          cidade: dados.cidade,
-          coluna: dados.coluna,
-        });
+        const { data: tarefaEditada } = await api.put(
+          "/tarefas/" + dados.id,
+          dados,
+        );
 
         // Atualizar a tarefa no estado local
         setTarefas((tarefasAtuais) =>
           tarefasAtuais.map((t) => (t.id === dados.id ? tarefaEditada : t)),
         );
+        if (erro) {
+          setErro("Erro ao editar tarefa. Tente novamente.");
+        }
       } else {
         // CRIAR — POST
         const { data: novaTarefa } = await api.post("/tarefas", dados);
@@ -220,7 +214,7 @@ export default function MiniKanban() {
                 <p>
                   Desenvolvido por: <em>Rykelmy V. Belo</em>
                 </p>
-                <p>TaskFlow © 2026 — SENAI CTGAS-ER · Prof. Alan Glei.</p>
+                <p>TaskFlow © 2026 · SENAI CTGAS-ER RN · Prof. Alan Glei.</p>
               </footer>
             </div>
           </>
