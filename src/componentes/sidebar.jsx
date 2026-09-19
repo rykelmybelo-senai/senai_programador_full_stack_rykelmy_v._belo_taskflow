@@ -4,7 +4,7 @@ import styles from "./sidebar.module.css";
 import { useAuth } from "../contexts/AuthContext";
 
 function Sidebar() {
-  const { logado, logout } = useAuth();
+  const { token, usuario, logout } = useAuth();
   const [menuAberto, setMenuAberto] = useState(false);
   const linkClass = ({ isActive }) =>
     isActive ? styles.link + " " + styles.ativo : styles.link;
@@ -24,7 +24,7 @@ function Sidebar() {
         </div>
 
         <nav className={styles.nav}>
-          {logado && (
+          {token && (
             <NavLink to="/" className={linkClass}>
               Dashboard
             </NavLink>
@@ -33,10 +33,15 @@ function Sidebar() {
             Sobre
           </NavLink>
         </nav>
-        {logado && (
-          <button className={styles.btnLogout} onClick={logout}>
-            Simbora
-          </button>
+        {token && (
+          <>
+            <span className={styles.usuarioLogado}>
+              Bem-vindo, {usuario?.nome ?? "Usuário"}!
+            </span>
+            <button className={styles.btnLogout} onClick={logout}>
+              Sair
+            </button>
+          </>
         )}
       </aside>
       {menuAberto && (

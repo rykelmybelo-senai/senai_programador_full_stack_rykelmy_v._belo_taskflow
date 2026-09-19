@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
     setUsuario(dadosUsuario);
     setToken(tokenRecebido);
     localStorage.setItem("token", tokenRecebido);
-    console.log(tokenRecebido)
+    // console.log(tokenRecebido)
   }
 
   function logout() {

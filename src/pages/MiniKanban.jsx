@@ -10,6 +10,13 @@ export default function MiniKanban() {
   const [erro, setErro] = useState("");
 
   useEffect(() => {
+    if (erro) {
+      window.alert(erro);
+      setErro("");
+    }
+  }, [erro]);
+
+  useEffect(() => {
     async function carregarTarefas() {
       try {
         setCarregando(true);
@@ -47,15 +54,20 @@ export default function MiniKanban() {
   }
 
   // Função moverTarefa sem mutar o array (.map + spread)
-  async function moverTarefa(id, dados, novaColuna) {
-      // PATCH — envia apenas o campo coluna
-      const tarefaMovida = await api.put(`/tarefas/${id}`, dados, { coluna: novaColuna });
-
-      // Atualizar o estado local com a tarefa retornada
-
+  async function moverTarefa(id, novaColuna) {
+    try {
+      const tarefaAtual = tarefas.find((t) => t.id === id);
+      const { data: tarefaMovida } = await api.put(`/tarefas/${id}`, {
+        ...tarefaAtual,
+        coluna: novaColuna,
+      });
       setTarefas((tarefasAtuais) =>
-        tarefasAtuais.map((t) => (t.id === id ? tarefaMovida.data : t)),
+        tarefasAtuais.map((t) => (t.id === id ? tarefaMovida : t)),
       );
+    } catch (e) {
+      setErro("Erro ao mover a tarefa. Tente novamente.");
+      console.error(e);
+    }
   }
 
   //Integrando o Modal
@@ -119,10 +131,10 @@ export default function MiniKanban() {
             <div className="dot"></div>
           </section>
         )}
-        {erro && (
+        {/* {erro && (
           <p style={{ textAlign: "center", color: "#EF4444" }}>{erro}</p>
-        )}
-        {!carregando && !erro && (
+        )} */}
+        {!carregando && (
           <>
             <div className="kanban-coluna">
               {/* ── COLUNA 1: A FAZER ────────────────────────────────────────── */}

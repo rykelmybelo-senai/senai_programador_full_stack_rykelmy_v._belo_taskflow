@@ -67,7 +67,7 @@
     box-shadow 0.2s ease;
   box-shadow: 0 2px 8px #f5a62340;
   white-space: nowrap;
-  margin-top: auto;
+  /* margin-top: auto; */
 }
 
 .btnLogout:hover {
@@ -92,6 +92,14 @@
 
 .overlay {
   display: none;
+}
+
+.usuarioLogado {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  padding: 10px 14px;
+  border-left: 2px solid transparent;
+  margin-top: auto;
 }
 
 /* Responsividade para telas menores */

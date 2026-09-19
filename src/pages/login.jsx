@@ -38,7 +38,7 @@ function Login() {
 
         {/* Input de usuário — estado controlado */}
 
-        <label for = "email">Email</label>
+        <label htmlFor="email">Email</label>
 
         <input
           className="login-input"
@@ -50,7 +50,7 @@ function Login() {
 
         {/* Input de senha — type='password' oculta os caracteres */}
 
-        <label for = "senha">Senha</label>
+        <label htmlFor="senha">Senha</label>
 
         <input
           className="login-input"
