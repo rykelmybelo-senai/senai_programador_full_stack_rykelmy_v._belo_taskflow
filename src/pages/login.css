@@ -7,6 +7,10 @@
   padding: 20px;
 }
 
+.image-user {
+  margin: auto;
+}
+
 .login-card {
   background-color: #0202029f;
   border: 1px solid #c99811;
