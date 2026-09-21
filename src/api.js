@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://taskflow-api-rykelmy.vercel.app",
+  baseURL: import.meta.env.VITE_BASE_URL_API,
 });
 
 api.interceptors.request.use((config) => {
