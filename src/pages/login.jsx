@@ -33,9 +33,17 @@ function Login() {
   return (
     <div className="login-container">
       <div className={`login-card ${shake ? "shake" : ""}`}>
-        <img className="image-user" src="src/user_logo.webp" alt="Imagem tela login" height="100" width="100"/>
+        <img
+          className="image-user"
+          src="/public/imagens/user_logo.webp"
+          alt="Imagem tela login"
+          height="100"
+          width="100"
+        />
         <h1 className="login-logo">Login</h1>
-        <p className="login-subtitulo">Informe suas credenciais para continuar</p>
+        <p className="login-subtitulo">
+          Informe suas credenciais para continuar
+        </p>
 
         {/* Input de usuário — estado controlado */}
 
