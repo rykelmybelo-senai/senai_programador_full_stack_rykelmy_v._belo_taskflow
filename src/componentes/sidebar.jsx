@@ -29,6 +29,9 @@ function Sidebar() {
               Dashboard
             </NavLink>
           )}
+          <NavLink to="/login" className={linkClass}>
+            Login
+          </NavLink>
           <NavLink to="/sobre" className={linkClass}>
             Sobre
           </NavLink>
