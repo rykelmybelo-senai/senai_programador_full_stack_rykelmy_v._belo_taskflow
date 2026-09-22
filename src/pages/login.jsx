@@ -35,7 +35,7 @@ function Login() {
       <div className={`login-card ${shake ? "shake" : ""}`}>
         <img
           className="image-user"
-          src="/public/imagens/user_logo.webp"
+          src="/user-logo.webp"
           alt="Imagem tela login"
           height="100"
           width="100"
