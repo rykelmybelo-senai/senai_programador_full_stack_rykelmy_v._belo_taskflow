@@ -14,6 +14,8 @@ function TarefaItem({
   colunaAnterior = null,
   colunaProxima = null,
   cidade = null,
+  usuario = null,
+  projeto = null,
 }) {
   // ── Classes CSS — sem alteração ──────────────────────────────────────────
   const classeItem = styles.tarefa + " " + styles[prioridade];
@@ -34,6 +36,8 @@ function TarefaItem({
         {/* Texto da tarefa — duplo clique para concluir (funciona nos dois modos) */}
         <span onDoubleClick={onEditar}>{texto}</span>
         {cidade && <span className={styles.cidade}>{cidade}</span>}
+        {usuario && <span className={styles.usuario}>{usuario}</span>}
+        {projeto && <span className={styles.projeto}>{projeto}</span>}
       </div>
 
       {/* Badge de prioridade — reutilizado nos dois modos sem alteração */}
