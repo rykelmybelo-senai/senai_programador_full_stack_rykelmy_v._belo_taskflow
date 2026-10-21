@@ -13,7 +13,7 @@ function TarefaItem({
   onMover = null,
   colunaAnterior = null,
   colunaProxima = null,
-  cidade = null,
+  // cidade = null,
   usuario = null,
   projeto = null,
 }) {
@@ -35,7 +35,7 @@ function TarefaItem({
       <div className={styles.conteudo}>
         {/* Texto da tarefa — duplo clique para concluir (funciona nos dois modos) */}
         <span onDoubleClick={onEditar}>{texto}</span>
-        {cidade && <span className={styles.cidade}>{cidade}</span>}
+        {/* {cidade && <span className={styles.cidade}>{cidade}</span>} */}
         {usuario && <span className={styles.usuario}>{usuario}</span>}
         {projeto && <span className={styles.projeto}>{projeto}</span>}
       </div>

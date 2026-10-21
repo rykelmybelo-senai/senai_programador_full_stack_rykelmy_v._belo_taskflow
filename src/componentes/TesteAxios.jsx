@@ -10,7 +10,7 @@ function ConsultarCep() {
       console.log("CEP:", resposta.data.cep);
       console.log("Logradouro:", resposta.data.logradouro);
       console.log("Bairro:", resposta.data.bairro);
-      console.log("Cidade:", resposta.data.localidade);
+      // console.log("Cidade:", resposta.data.localidade);
       console.log("Estado:", resposta.data.uf);
       console.log("DDD:", resposta.data.ddd);
       console.log("Região:", resposta.data.regiao);

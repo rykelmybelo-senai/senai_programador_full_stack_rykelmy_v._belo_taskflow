@@ -30,7 +30,6 @@ function ListaTarefas({
             <TarefaItem
               key={tarefa.id}
               texto={tarefa.texto}
-              cidade={tarefa.cidade}
               concluida={tarefa.concluida}
               prioridade={tarefa.prioridade}
               onDeletar={() => onDeletar(tarefa.id)}

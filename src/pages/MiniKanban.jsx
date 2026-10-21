@@ -2,37 +2,49 @@ import ModalTarefa from "../componentes/ModalTarefa";
 import { useState, useEffect } from "react";
 import ListaTarefas from "../componentes/ListaTarefas";
 import Header from "../componentes/Header";
-import api from "../api";
+import api, { mensagensDeErro } from "../api";
 
 export default function MiniKanban() {
   const [tarefas, setTarefas] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
+  const [listaPrioridades, setListaPrioridades] = useState([]);
+  const [listaUsuarios, setListaUsuarios] = useState([]);
+  const [listaProjetos, setListaProjetos] = useState([]);
+
+  // useEffect(() => {
+  //   if (erro) {
+  //     window.alert(erro);
+  //     setErro("");
+  //   }
+  // }, [erro]);
 
   useEffect(() => {
-    if (erro) {
-      window.alert(erro);
-      setErro("");
-    }
-  }, [erro]);
-
-  useEffect(() => {
-    async function carregarTarefas() {
+    async function carregar() {
       try {
         setCarregando(true);
         setErro("");
 
-        const resposta = await api.get("/tarefas");
+        const [respPrioridades, respTarefas, respUsuarios, respProjetos] =
+          await Promise.all([
+            api.get("/prioridades"),
+            api.get("/tarefas"),
+            api.get("/usuarios"),
+            api.get("/projetos"),
+          ]);
 
-        setTarefas(resposta.data);
+        setListaPrioridades(respPrioridades.data);
+        setTarefas(respTarefas.data);
+        setListaUsuarios(respUsuarios.data);
+        setListaProjetos(respProjetos.data);
       } catch (e) {
-        setErro("Erro ao carregar tarefas. Verifique a conexão.");
+        setErro(mensagensDeErro(e).join("\n"));
         console.error(e);
       } finally {
         setCarregando(false);
       }
     }
-    carregarTarefas();
+    carregar();
   }, []);
 
   // Deletar tarefa
@@ -46,10 +58,9 @@ export default function MiniKanban() {
       await api.delete("/tarefas/" + id);
 
       // Remover do estado local apenas apos confirmar na API
-      setTarefas((tarefasAtuais) => tarefasAtuais.filter((t) => t.id !== id));
+      setTarefas(tarefas.filter((t) => t.id !== id));
     } catch (e) {
-      setErro("Erro ao deletar tarefa. Tente novamente.");
-      console.error(e);
+      alert(mensagensDeErro(e).join("\n"));
     }
   }
 
@@ -65,8 +76,7 @@ export default function MiniKanban() {
         tarefasAtuais.map((t) => (t.id === id ? tarefaMovida : t)),
       );
     } catch (e) {
-      setErro("Erro ao mover a tarefa. Tente novamente.");
-      console.error(e);
+      alert(mensagensDeErro(e).join("\n"));
     }
   }
 
@@ -87,29 +97,12 @@ export default function MiniKanban() {
   }
 
   async function salvarTarefa(dados) {
-    try {
-      if (dados.id !== undefined) {
-        // EDITAR — PUT com o id na URL
-        const { data: tarefaEditada } = await api.put(
-          "/tarefas/" + dados.id,
-          dados,
-        );
-
-        // Atualizar a tarefa no estado local
-        setTarefas((tarefasAtuais) =>
-          tarefasAtuais.map((t) => (t.id === dados.id ? tarefaEditada : t)),
-        );
-        if (erro) {
-          setErro("Erro ao editar tarefa. Tente novamente.");
-        }
-      } else {
-        // CRIAR — POST
-        const { data: novaTarefa } = await api.post("/tarefas", dados);
-        setTarefas((tarefasAtuais) => [...tarefasAtuais, novaTarefa]);
-      }
-    } catch (e) {
-      setErro("Erro ao salvar tarefa.");
-      console.error(e);
+    if (dados.id) {
+      const resposta = await api.put(`/tarefas/${dados.id}`, dados);
+      setTarefas(tarefas.map((t) => (t.id === dados.id ? resposta.data : t)));
+    } else {
+      const resposta = await api.post("/tarefas", dados);
+      setTarefas([...tarefas, resposta.data]);
     }
   }
 
@@ -154,6 +147,7 @@ export default function MiniKanban() {
               </div>
               <ListaTarefas
                 tarefas={tarefas.filter((t) => t.coluna === "afazer")}
+                prioridades={listaPrioridades}
                 onDeletar={deletarTarefa}
                 onEditar={abrirModalEditar}
                 onMover={moverTarefa}
@@ -180,6 +174,7 @@ export default function MiniKanban() {
               </div>
               <ListaTarefas
                 tarefas={tarefas.filter((t) => t.coluna === "andamento")}
+                prioridades={listaPrioridades}
                 onDeletar={deletarTarefa}
                 onEditar={abrirModalEditar}
                 onMover={moverTarefa}
@@ -206,6 +201,7 @@ export default function MiniKanban() {
               </div>
               <ListaTarefas
                 tarefas={tarefas.filter((t) => t.coluna === "concluido")}
+                prioridades={listaPrioridades}
                 onDeletar={deletarTarefa}
                 onEditar={abrirModalEditar}
                 onMover={moverTarefa}
@@ -220,6 +216,9 @@ export default function MiniKanban() {
               onSalvar={salvarTarefa}
               tarefa={tarefaEditando}
               coluna={colunaAtiva}
+              prioridades={listaPrioridades}
+              usuarios={listaUsuarios}
+              projetos={listaProjetos}
             />
             <div style={{ width: "100%", marginTop: "40px" }}>
               <footer>
