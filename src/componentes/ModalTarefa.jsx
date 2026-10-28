@@ -27,7 +27,7 @@ function ModalTarefa({
   const [salvando, setSalvando] = useState(false);
 
   useEffect(() => {
-    setErros ([]);
+    setErros([]);
     if (tarefa) {
       setTexto(tarefa.texto);
       setIdPrioridade(tarefa.prioridade_id);
@@ -73,46 +73,96 @@ function ModalTarefa({
     setErros([]);
     setSalvando(true);
     try {
-        await onSalvar({
-            ...tarefa,
-            id: tarefa?.id, // undefined = criar | número = editar
-            texto,
-            coluna: tarefa?.coluna || coluna,
-            prioridade_id: paraNumero(idPrioridade),
-            usuario_id: paraNumero(idUsuario),
-            projeto_id: paraNumero(idProjeto),
-        });
-    onFechar();
-  } catch (e) {
-    setErros(mensagensDeErro (e));
-  } finally {
-    setSalvando(false)
+      await onSalvar({
+        ...tarefa,
+        id: tarefa?.id, // undefined = criar | número = editar
+        texto,
+        coluna: tarefa?.coluna || coluna,
+        prioridade_id: paraNumero(idPrioridade),
+        usuario_id: paraNumero(idUsuario),
+        projeto_id: paraNumero(idProjeto),
+      });
+      onFechar();
+    } catch (e) {
+      setErros(mensagensDeErro(e));
+    } finally {
+      setSalvando(false);
+    }
   }
-}
   if (!aberto) return null;
 
   return (
     <div className={styles.overlay} onClick={onFechar}>
       <div className={styles.card} onClick={(e) => e.stopPropagation()}>
-        <h2>{tarefa ? "Editar tarefa" : "Nova tarefa"}</h2>
-        <input
-          placeholder="Texto da tarefa"
-          value={texto}
-          onChange={(e) => setTexto(e.target.value)}
-        />
-        <input
-          placeholder="Responsável"
-          value={idUsuario}
-          onChange={(e) => setUsuario(e.target.value)}
-        />
-        <input
-          placeholder="Projeto"
-          value={idProjeto}
-          onChange={(e) => setProjeto(e.target.value)}
-        />
+        <div className={styles.campo}>
+          <label htmlFor="tarefa-texto">Tarefa</label>
+          <h2>{tarefa ? "Editar tarefa" : "Nova tarefa"}</h2>
+          <input
+            id="tarefa-texto"
+            placeholder="Descreva a tarefa"
+            value={texto}
+            onChange={(e) => setTexto(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.campo}>
+          <label htmlFor="tarefa-responsavel">Responsável</label>
+          <select
+            id="tarefa-responsavel"
+            value={idUsuario}
+            onChange={(e) => setIdUsuario(e.target.value)}
+          >
+            {usuarios.map((u) => (
+              <option key={u.id} value={u.id}>
+                {u.nome}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.campo}>
+          <label htmlFor="tarefa-projeto">Projeto</label>
+          <select
+            id="tarefa-projeto"
+            value={idProjeto}
+            onChange={(e) => setIdProjeto(e.target.value)}
+          >
+            {projetos.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.nome}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.campo}>
+          <label htmlFor="tarefa-prioridade">Projeto</label>
+          <select
+            id="tarefa-prioridade"
+            value={idPrioridade}
+            onChange={(e) => setIdPrioridade(e.target.value)}
+          >
+            {prioridades.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.nome}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {erros.length > 0 && (
+          <ul className={styles.erros}>
+            {erros.map((mensagem, i) => (
+              <li key={i}>{mensagem}</li>
+            ))}
+          </ul>
+        )}
+
         <div className={styles.botoes}>
           <button onClick={onFechar}>Cancelar</button>
-          <button onClick={handleSalvar}>Salvar</button>
+          <button onClick={handleSalvar} disabled={salvando}>
+            {salvando ? "Salvando..." : "Salvar"}
+          </button>
         </div>
       </div>
     </div>
