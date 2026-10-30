@@ -5,6 +5,7 @@ function TarefaItem({
   texto,
   // concluida = false,
   prioridade = "media",
+  rotuloPrioridade = "", // texto: Alto/Médio/Baixo
   onEditar,
   onDeletar,
 
@@ -41,7 +42,7 @@ function TarefaItem({
       </div>
 
       {/* Badge de prioridade — reutilizado nos dois modos sem alteração */}
-      <span className={classePrioridade}>{prioridade}</span>
+      <span className={classePrioridade}>{rotuloPrioridade || prioridade}</span>
 
       {/*
         ── Container de ações ────────────────────────────────────────────────
