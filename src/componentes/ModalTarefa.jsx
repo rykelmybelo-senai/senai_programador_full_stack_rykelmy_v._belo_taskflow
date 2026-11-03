@@ -39,7 +39,7 @@ function ModalTarefa({
       setIdUsuario(usuario?.id || usuarios[0]?.id || "");
       setIdProjeto(projetos[0]?.id || "");
     }
-  }, [tarefa, aberto]);
+  }, [tarefa, aberto, usuario, usuarios, projetos]);
 
   useEffect(() => {
     if (!aberto) return;
@@ -53,7 +53,7 @@ function ModalTarefa({
     return () => {
       document.removeEventListener("keydown", handleEsc);
     };
-  });
+  }, [aberto, onFechar]);
 
   // async function consultarCidade (cepDigitado) {
   //     if (cepDigitado.trim() .length < 8) return;
@@ -75,8 +75,8 @@ function ModalTarefa({
     try {
       await onSalvar({
         ...tarefa,
-        id: tarefa?.id, // undefined = criar | número = editar
-        texto,
+        id: tarefa?.id ? Number(tarefa?.id) : undefined, // undefined = criar | número = editar
+        texto: texto.trim(),
         coluna: tarefa?.coluna || coluna,
         prioridade_id: paraNumero(idPrioridade),
         usuario_id: paraNumero(idUsuario),
@@ -136,7 +136,7 @@ function ModalTarefa({
         </div>
 
         <div className={styles.campo}>
-          <label htmlFor="tarefa-prioridade">Projeto</label>
+          <label htmlFor="tarefa-prioridade">Prioridade</label>
           <select
             id="tarefa-prioridade"
             value={idPrioridade}
@@ -144,7 +144,7 @@ function ModalTarefa({
           >
             {prioridades.map((p) => (
               <option key={p.id} value={p.id}>
-                {p.nome}
+                {p.descricao}
               </option>
             ))}
           </select>

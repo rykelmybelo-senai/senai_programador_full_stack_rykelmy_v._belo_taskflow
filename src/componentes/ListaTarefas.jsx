@@ -1,6 +1,6 @@
 import TarefaItem from "./TarefaItem";
 
-const CLASSE_PRIORIDADE = { 1: "baixa", 2: "media", 3: "alta" };
+const CLASSE_PRIORIDADE = { 1: "alta", 2: "media", 3: "baixa" };
 
 function ListaTarefas({
   tarefas = [],
@@ -34,6 +34,8 @@ function ListaTarefas({
                 concluida={tarefa.concluida}
                 prioridade={CLASSE_PRIORIDADE[tarefa.prioridade_id] || "media"}
                 rotuloPrioridade={itemPrioridade?.descricao}
+                usuario={tarefa.usuario || ""}
+                projeto={tarefa.projeto || ""}
                 onDeletar={() => onDeletar(tarefa.id)}
                 onConcluir={() => onConcluir(tarefa.id)}
                 onEditar={onEditar ? () => onEditar(tarefa) : undefined}

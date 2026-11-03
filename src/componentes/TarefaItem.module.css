@@ -74,6 +74,28 @@
 .badge-media   { background-color: rgba(245, 166, 35, 0.15); color: #F5A623; }
 .badge-baixa   { background-color: rgba(34, 197, 94, 0.15); color: #22C55E; }
 
+.badge-user {
+  font-size: 0.5rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badge-projeto {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 /* ── CONTAINER DE AÇÕES ── NOVO ───────────────────────────────────────────────
    Agrupa os botões ← → e X em linha.
    No modo lista só o X é renderizado.

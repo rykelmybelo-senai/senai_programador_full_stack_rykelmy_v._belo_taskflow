@@ -1,30 +1,21 @@
 import styles from "./TarefaItem.module.css";
 
 function TarefaItem({
-  // Props existentes — sem alteração
   texto,
-  // concluida = false,
   prioridade = "media",
-  rotuloPrioridade = "", // texto: Alto/Médio/Baixo
+  rotuloPrioridade = "",
   onEditar,
   onDeletar,
-
-  // Props novas — opcionais, com valor padrão null
-  // Recebidas via ListaTarefas, que injeta o tarefa.id no onMover
   onMover = null,
   colunaAnterior = null,
   colunaProxima = null,
-  // cidade = null,
-  usuario = null,
-  projeto = null,
+  usuario = "",
+  projeto = "",
 }) {
   // ── Classes CSS — sem alteração ──────────────────────────────────────────
   const classeItem = styles.tarefa + " " + styles[prioridade];
-
-  // const classeTexto = concluida
-  //   ? styles.textoTarefa + " " + styles["texto-tarefa"]
-  //   : styles.textoTarefa;
-
+  const classeUser = styles["badge-user"] + " " + styles["badge-" + usuario];
+  const classeProjeto = styles["badge-projeto"] + " " + styles["badge-" + projeto];
   const classePrioridade =
     styles["badge-prioridade"] + " " + styles["badge-" + prioridade];
 
@@ -37,8 +28,8 @@ function TarefaItem({
         {/* Texto da tarefa — duplo clique para concluir (funciona nos dois modos) */}
         <span onDoubleClick={onEditar}>{texto}</span>
         {/* {cidade && <span className={styles.cidade}>{cidade}</span>} */}
-        {usuario && <span className={styles.usuario}>{usuario}</span>}
-        {projeto && <span className={styles.projeto}>{projeto}</span>}
+        {usuario && <span className={classeUser}>{usuario}</span>}
+        {projeto && <span className={classeProjeto}>{projeto}</span>}
       </div>
 
       {/* Badge de prioridade — reutilizado nos dois modos sem alteração */}
@@ -60,7 +51,7 @@ function TarefaItem({
             ←
           </button>
         )}
-        
+
         {/* Botão X — deletar — presente nos dois modos */}
         <button className={styles.btnDeletar} onClick={onDeletar}>
           🗑️

@@ -98,12 +98,14 @@ export default function MiniKanban() {
 
   async function salvarTarefa(dados) {
     if (dados.id) {
-      const resposta = await api.put(`/tarefas/${dados.id}`, dados);
-      setTarefas(tarefas.map((t) => (t.id === dados.id ? resposta.data : t)));
+      await api.put(`/tarefas/${dados.id}`, dados);
     } else {
-      const resposta = await api.post("/tarefas", dados);
-      setTarefas([...tarefas, resposta.data]);
+      await api.post("/tarefas", dados);
     }
+
+    // Busca a lista atualizada do banco para garantir que os nomes (usuario/projeto) venham preenchidos
+    const resposta = await api.get("/tarefas");
+    setTarefas(resposta.data);
   }
 
   return (
