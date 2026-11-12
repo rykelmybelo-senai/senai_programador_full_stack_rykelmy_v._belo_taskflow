@@ -69,7 +69,17 @@ function ModalTarefa({
   // }
 
   async function handleSalvar() {
-    if (texto.trim() === "") return;
+    const errosValidacao = [];
+
+    if (texto.trim() === "") {
+      errosValidacao.push("Informe a descrição da tarefa.");
+    }
+
+    if (errosValidacao.length > 0) {
+      setErros(errosValidacao);
+      return;
+    }
+
     setErros([]);
     setSalvando(true);
     try {
@@ -101,7 +111,10 @@ function ModalTarefa({
             id="tarefa-texto"
             placeholder="Descreva a tarefa"
             value={texto}
-            onChange={(e) => setTexto(e.target.value)}
+            onChange={(e) => {
+              setTexto(e.target.value);
+              if (erros.length > 0) setErros([]);
+            }}
           />
         </div>
 

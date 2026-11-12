@@ -4,7 +4,7 @@ const CLASSE_PRIORIDADE = { 1: "alta", 2: "media", 3: "baixa" };
 
 function ListaTarefas({
   tarefas = [],
-  prioridade = [],
+  prioridades = [],
   onDeletar,
   onEditar,
   onConcluir,
@@ -23,7 +23,7 @@ function ListaTarefas({
       {tarefas.length > 0 && (
         <ul id="lista-tarefas">
           {tarefas.map((tarefa) => {
-            const itemPrioridade = prioridade.find(
+            const itemPrioridade = prioridades.find(
               (p) => p.id === tarefa.prioridade_id,
             );
 
