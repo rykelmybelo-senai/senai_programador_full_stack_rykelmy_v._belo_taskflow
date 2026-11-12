@@ -22,6 +22,7 @@ api.interceptors.response.use(
 
     if (erro.response?.status === 401 && !ehLogin) {
       localStorage.removeItem("token");
+      localStorage.removeItem("usuario");
       window.location.href = "/login";
     }
 
