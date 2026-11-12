@@ -73,7 +73,9 @@ export default function MiniKanban() {
         coluna: novaColuna,
       });
       setTarefas((tarefasAtuais) =>
-        tarefasAtuais.map((t) => (t.id === id ? tarefaMovida : t)),
+        tarefasAtuais.map((t) =>
+          t.id === id ? { ...tarefaAtual, ...tarefaMovida } : t,
+        ),
       );
     } catch (e) {
       alert(mensagensDeErro(e).join("\n"));
