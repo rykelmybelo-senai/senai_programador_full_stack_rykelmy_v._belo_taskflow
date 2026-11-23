@@ -34,8 +34,8 @@ function ListaTarefas({
                 concluida={tarefa.concluida}
                 prioridade={CLASSE_PRIORIDADE[tarefa.prioridade_id] || "media"}
                 rotuloPrioridade={itemPrioridade?.descricao}
-                usuario={tarefa.usuario || ""}
-                projeto={tarefa.projeto || ""}
+                usuario={tarefa.usuario || "Sem responsável"}
+                projeto={tarefa.projeto || "Sem projeto"}
                 onDeletar={() => onDeletar(tarefa.id)}
                 onConcluir={() => onConcluir(tarefa.id)}
                 onEditar={onEditar ? () => onEditar(tarefa) : undefined}
