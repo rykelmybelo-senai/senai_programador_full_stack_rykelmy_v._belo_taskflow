@@ -1,8 +1,8 @@
 import { describe, test, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import ModalTarefa from "./ModalTarefa";
-import { AuthProvider } from "../contexts/AuthContext";
+import ModalTarefa from "../ModalTarefa";
+import { AuthProvider } from "../../contexts/AuthContext";
 
 // Listas de exemplo, no formato que a API devolve
 
@@ -37,3 +37,108 @@ function abrirModal(props = {}) {
     </AuthProvider>,
   );
 }
+
+describe("ModalTarefa", () => {
+  test("fechado, não mostra nada", () => {
+    abrirModal({ aberto: false });
+
+    expect(screen.queryByText("Nova tarefa")).not.toBeInTheDocument();
+  });
+});
+
+test("aberto para criar, mostra o título e os campos", () => {
+  abrirModal();
+
+  expect(
+    screen.getByRole("heading", { name: "Nova tarefa" }),
+  ).toBeInTheDocument();
+
+  expect(screen.getByLabelText("Tarefa")).toHaveValue("");
+  expect(screen.getByLabelText("Responsável")).toHaveValue("1");
+  expect(screen.getByLabelText("Projeto")).toHaveValue("10");
+  expect(screen.getByLabelText("Prioridade")).toHaveValue("2");
+});
+
+test("aberto para editar, vem preenchido", () => {
+  const tarefa = {
+    id: 7,
+    texto: "Revisar a API",
+    coluna: "andamento",
+
+    prioridade_id: 1,
+    usuario_id: 2,
+    projeto_id: 20,
+  };
+
+  abrirModal({ tarefa });
+
+  expect(
+    screen.getByRole("heading", { name: "Editar tarefa" }),
+  ).toBeInTheDocument();
+
+  expect(screen.getByLabelText("Tarefa")).toHaveValue("Revisar a API");
+
+  expect(screen.getByLabelText("Responsável")).toHaveValue("2");
+});
+
+test("o que a pessoa digita aparece no campo", async () => {
+  const user = userEvent.setup();
+
+  abrirModal();
+
+  const campo = screen.getByLabelText("Tarefa");
+
+  await user.type(campo, "Estudar mocks");
+
+  expect(campo).toHaveValue("Estudar mocks");
+});
+
+test("Cancelar e Esc chamam onFechar", async () => {
+  const user = userEvent.setup();
+  const onFechar = vi.fn();
+
+  abrirModal({ onFechar });
+
+  await user.click(screen.getByRole("button", { name: "Cancelar" }));
+  await user.keyboard("{Escape}");
+
+  expect(onFechar).toHaveBeenCalledTimes(2);
+});
+
+test("Salvar envia os dados e fecha o modal", async () => {
+  const user = userEvent.setup();
+  const onSalvar = vi.fn().mockResolvedValue();
+  const onFechar = vi.fn();
+
+  abrirModal({ onSalvar, onFechar, coluna: "afazer" });
+
+  await user.type(screen.getByLabelText("Tarefa"), "Estudar mocks");
+  await user.selectOptions(screen.getByLabelText("Prioridade"), "Alto");
+  await user.click(screen.getByRole("button", { name: "Salvar" }));
+
+  expect(onSalvar).toHaveBeenCalledWith({
+    texto: "Estudar mocks",
+    coluna: "afazer",
+    prioridade_id: 1,
+    usuario_id: 1,
+    projeto_id: 10,
+  });
+
+  expect(onFechar).toHaveBeenCalledTimes(1);
+});
+
+test("a API recusa: mostra os erros e não fecha", async () => {
+  const user = userEvent.setup();
+  const erro400 = {
+    response: { data: { erro: { detalhes: ["Informe a descrição da tarefa."] } } },
+  };
+  const onSalvar = vi.fn().mockRejectedValue(erro400);
+  const onFechar = vi.fn();
+
+  abrirModal({ onSalvar, onFechar });
+
+  await user.click(screen.getByRole("button", { name: "Salvar" }));
+
+  expect(await screen.findByText("Informe a descrição da tarefa.")).toBeInTheDocument();
+  expect(onFechar).not.toHaveBeenCalled();
+});
